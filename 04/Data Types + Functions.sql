@@ -103,3 +103,40 @@ SELECT
 FROM
     customer_orders;
     
+Select units_in_stock,
+Case
+	When units_in_stock < 20 THEN "Order Now!"
+    When units_in_stock Between 21 AND 50 THEN "Check in 3 days"
+    When units_in_stock > 51 THEN "In Stock"
+END AS order_status
+from products;
+
+SELECT 
+    units_in_stock,
+    CASE
+        WHEN units_in_stock < 20 THEN 'Order Now!'
+        WHEN units_in_stock BETWEEN 21 AND 50 THEN 'Check in 3 days'
+        ELSE 'In Stock'
+    END AS order_status
+FROM
+    products;
+    
+SELECT 
+    order_id,
+    order_date,
+    CASE
+        WHEN YEAR(order_date) = YEAR(NOW()) - 4 THEN 'Active'
+        WHEN YEAR(order_date) = YEAR(NOW()) - 5 THEN 'Last Year'
+        ELSE 'Archived'
+    END AS years
+FROM
+    customer_orders;
+    
+Select CAST("2022-01-01" AS DATETIME);
+
+SELECT 
+    birth_date,
+    CAST(birth_date AS DATETIME),
+    CONVERT(birth_date, DATETIME)
+FROM
+    customers;
