@@ -157,3 +157,28 @@ FROM
     customers
 WHERE
     YEAR(birth_date) < 1950;
+    
+SELECT DISTINCT
+    p.product_name,
+    oi.unit_price,
+    p.sale_price,
+    p.units_in_stock,
+    p.sale_price - oi.unit_price AS profit,
+    (p.sale_price - oi.unit_price) * p.units_in_stock AS potential_profit
+FROM
+    ordered_items oi
+        JOIN
+    products p USING (product_id)
+ORDER BY potential_profit DESC;
+
+SELECT 
+    oi.order_id, oi.status, sds.name, oi.shipped_date, s.name
+FROM
+    ordered_items oi
+        JOIN
+    supplier_delivery_status sds ON oi.status = sds.order_status_id
+        JOIN
+    suppliers s ON oi.shipper_id = s.supplier_id
+WHERE
+    sds.name <> 'Delivered'
+        AND YEAR(oi.shipped_date) < 2022; 
