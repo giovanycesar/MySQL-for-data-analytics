@@ -147,3 +147,67 @@ SELECT
     *
 FROM
     customer_sweepstakes;
+    
+SELECT 
+    address,
+    SUBSTRING_INDEX(address, ',', 1),
+    SUBSTRING_INDEX(address, ',', 2),
+    SUBSTRING_INDEX(address, ',', - 1)
+FROM
+    customer_sweepstakes;
+    
+SELECT 
+    address,
+    SUBSTRING_INDEX(address, ',', 1) AS street,
+    SUBSTRING_INDEX(SUBSTRING_INDEX(address, ',', 2),
+            ',',
+            - 1) AS city,
+    SUBSTRING_INDEX(address, ',', - 1) AS state
+FROM
+    customer_sweepstakes;
+    
+SELECT 
+    *
+FROM
+    customer_sweepstakes;
+    
+ALTER TABLE customer_sweepstakes
+ADD COLUMN street VARCHAR(50) AFTER address;
+
+ALTER TABLE customer_sweepstakes
+ADD COLUMN city VARCHAR(50) AFTER street,
+ADD COLUMN state VARCHAR(50) AFTER city;
+
+UPDATE customer_sweepstakes
+SET street = SUBSTRING_INDEX(address, ',', 1);
+
+UPDATE customer_sweepstakes 
+SET 
+    city = SUBSTRING_INDEX(SUBSTRING_INDEX(address, ',', 2),
+            ',',
+            - 1);
+            
+UPDATE customer_sweepstakes
+SET state = SUBSTRING_INDEX(address, ',', -1);
+
+SELECT 
+    state
+FROM
+    customer_sweepstakes;
+    
+UPDATE customer_sweepstakes 
+SET 
+    state = UPPER(state);
+    
+SELECT 
+    *
+FROM
+    customer_sweepstakes;
+    
+UPDATE customer_sweepstakes 
+SET 
+    city = TRIM(city);
+    
+UPDATE customer_sweepstakes 
+SET 
+    state = TRIM(state);
