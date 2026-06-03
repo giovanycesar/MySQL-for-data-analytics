@@ -211,3 +211,59 @@ SET
 UPDATE customer_sweepstakes 
 SET 
     state = TRIM(state);
+    
+SELECT 
+    *
+FROM
+    customer_sweepstakes;
+    
+UPDATE customer_sweepstakes
+SET phone = NULL
+WHERE phone = '';
+
+UPDATE customer_sweepstakes
+SET income = NULL
+WHERE income = '';
+
+SELECT AVG(COALESCE(income, 0))
+FROM customer_sweepstakes;
+
+SELECT 
+    birth_date, `Are you over 18?`
+FROM
+    customer_sweepstakes
+WHERE
+    YEAR(NOW()) - YEAR(birth_date) >= 18;
+    
+UPDATE customer_sweepstakes 
+SET 
+    `Are you over 18?` = 'Y'
+WHERE
+    YEAR(NOW()) - YEAR(birth_date) >= 18;
+
+SELECT 
+    birth_date, `Are you over 18?`
+FROM
+    customer_sweepstakes;
+    
+UPDATE customer_sweepstakes 
+SET 
+    `Are you over 18?` = 'N'
+WHERE
+    YEAR(NOW()) - YEAR(birth_date) < 18;
+
+ALTER TABLE customer_sweepstakes
+DROP COLUMN address;
+
+ALTER TABLE customer_sweepstakes
+DROP COLUMN favorite_color;
+
+SELECT 
+    *
+FROM
+    customer_sweepstakes;
+    
+SELECT 
+    *
+FROM
+    customer_sweepstakes_staging;
