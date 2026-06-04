@@ -44,6 +44,8 @@ WHERE Row_Num > 1);
 
 # Working with blank values
 
+# Status Column
+
 SELECT *
 FROM world_life_expectancy
 WHERE Status = '';
@@ -99,7 +101,9 @@ SET
 WHERE
     t1.Status = '' AND t2.Status <> ''
         AND t2.Status = 'Developed';
-        
+    
+# Life expectancy Column
+ 
 SELECT 
     *
 FROM
@@ -145,5 +149,67 @@ WHERE
     
 SELECT 
     *
+FROM
+    world_life_expectancy;
+
+# Exploratory Data Analysis
+    
+SELECT 
+    Country,
+    MIN(`Life expectancy`),
+    MAX(`Life expectancy`),
+    ROUND(MAX(`Life expectancy`) - MIN(`Life expectancy`),
+            1) AS Life_Increase_15_Years
+FROM
+    world_life_expectancy
+GROUP BY Country
+HAVING MIN(`Life expectancy`) <> 0
+    AND MAX(`Life expectancy`) <> 0
+ORDER BY Life_Increase_15_Years DESC;
+
+SELECT 
+    Year, ROUND(AVG(`Life expectancy`), 1)
+FROM
+    world_life_expectancy
+WHERE
+    `Life expectancy` <> 0
+        AND `Life expectancy` <> 0
+GROUP BY Year
+ORDER BY Year;
+
+SELECT 
+    *
+FROM
+    world_life_expectancy;
+    
+SELECT 
+    Country,
+    ROUND(AVG(`Life expectancy`), 1) AS Life_Exp,
+    ROUND(AVG(GDP), 1) AS GDP
+FROM
+    world_life_expectancy
+GROUP BY Country
+HAVING Life_Exp > 0 AND GDP > 0
+ORDER BY GDP ASC;
+
+SELECT 
+    SUM(CASE
+        WHEN GDP >= 1500 THEN 1
+        ELSE 0
+    END) AS High_GDP_Count,
+    ROUND(AVG(CASE
+                WHEN GDP >= 1500 THEN `Life expectancy`
+                ELSE NULL
+            END),
+            1) AS High_GDP_Life_Expectancy,
+    SUM(CASE
+        WHEN GDP < 1500 THEN 1
+        ELSE 0
+    END) AS Low_GDP_Count,
+    ROUND(AVG(CASE
+                WHEN GDP < 1500 THEN `Life expectancy`
+                ELSE NULL
+            END),
+            1) AS Low_GDP_Life_Expectancy
 FROM
     world_life_expectancy;
