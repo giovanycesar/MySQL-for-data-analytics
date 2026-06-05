@@ -173,7 +173,6 @@ FROM
     world_life_expectancy
 WHERE
     `Life expectancy` <> 0
-        AND `Life expectancy` <> 0
 GROUP BY Year
 ORDER BY Year;
 
@@ -213,3 +212,53 @@ SELECT
             1) AS Low_GDP_Life_Expectancy
 FROM
     world_life_expectancy;
+    
+SELECT Status,
+       ROUND(AVG(`Life expectancy`), 1)
+FROM world_life_expectancy
+GROUP BY Status;
+
+SELECT 
+    Status,
+    COUNT(DISTINCT Country),
+    ROUND(AVG(`Life expectancy`), 1)
+FROM
+    world_life_expectancy
+GROUP BY Status;
+
+SELECT 
+    Country,
+    ROUND(AVG(`Life expectancy`), 1) AS Life_Exp,
+    ROUND(AVG(BMI), 1) AS BMI
+FROM
+    world_life_expectancy
+GROUP BY Country
+HAVING Life_Exp > 0 AND BMI > 0
+ORDER BY BMI ASC;
+
+SELECT 
+    Country,
+    ROUND(AVG(`Life expectancy`), 1) AS Life_Exp,
+    ROUND(AVG(BMI), 1) AS BMI,
+    ROUND(AVG(GDP), 1) AS GDP
+FROM
+    world_life_expectancy
+GROUP BY Country
+HAVING Life_Exp > 0 AND BMI > 0 AND GDP > 0
+ORDER BY BMI ASC;
+
+SELECT 
+    *
+FROM
+    world_life_expectancy;
+    
+SELECT Country,
+       Year,
+       `Life expectancy`,
+       `Adult Mortality`,
+       SUM(`Adult Mortality`) OVER (
+           PARTITION BY Country
+           ORDER BY Year
+       ) AS Rolling_Total
+FROM world_life_expectancy
+WHERE Country LIKE "Brazil";
